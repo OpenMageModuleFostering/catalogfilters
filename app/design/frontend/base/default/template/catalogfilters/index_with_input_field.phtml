@@ -1,0 +1,92 @@
+<link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl('skin'); ?>frontend/base/default/css/semantic.css">
+<script src="<?php echo Mage::getBaseUrl('skin'); ?>frontend/base/default/js/semantic.js"></script>
+<?php 
+$model = Mage::getModel('catalogfilters/catalogfilters')->load(1);
+$array = explode(',', $model->getFilterAttributeCode());
+$_category  = Mage::getModel('catalog/layer')->getCurrentCategory();
+$currentUrl=strtok($_SERVER["REQUEST_URI"],'?');
+$cate_id = Mage::getModel('catalog/layer')->getCurrentCategory()->getId(); 
+?>
+<div id="attributes">
+<?php 
+foreach ($array as $key => $val) {
+    ?>
+<select class="ui search dropdown" disabled="disabled" id='<?php echo $val; ?>' > 
+    <option>Loading Options....</option>
+</select>
+<?php 
+
+}
+
+?>
+
+	
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function($){
+var url = "<?php echo Mage::getBaseUrl().'filters/test/loadAttribs'; ?>";
+		jQuery.ajax({
+            url: url,
+            dataType: 'json',
+            type : 'get',
+            data: {'cate_id':<?php echo $cate_id;?>},
+            success: function(response){
+
+            	var $el = jQuery("#attributes");
+                    if(response)
+                    {
+                    	jQuery.each(response, function(val, key) {
+	                    	// console.log(val);
+                             if(key)
+                             {
+                                var $el2 = jQuery("#"+val);
+                                $el2.empty(); // remove old options
+                                $el2.attr('onchange','getUrl("'+val+'",this)');
+                                $el2.addClass('ui search dropdown');
+                                $el2.append($("<option></option>").attr("value", '').text('Select Option'));
+                                jQuery.each(key, function(value1, key1) {
+                                $el2.append(jQuery("<option></option>").attr("value", key1).text(value1));
+                                });
+                                $el2.removeAttr('disabled');
+                            }else
+                            {
+                                var $el2 = jQuery("#"+val);
+                                $el2.empty(); // remove old options
+                                $el2.append($("<option></option>").attr("value", '').text('Select Option'));
+                                $el2.removeAttr('disabled');
+                            }
+
+                    	});	
+                	}
+                  jQuery('.ui.dropdown').dropdown();
+            }
+        });
+
+});
+jQuery('.ui.dropdown').dropdown();
+function getUrl($val,$el)
+{
+   window.location.href = "<?php echo $currentUrl?>?"+$val+"="+$el.value;
+}
+</script>
+<style>
+.dropdown
+{
+    overflow: visible !Important;
+    height: auto !Important;
+    width: auto !Important;
+}
+.dropdown:before, .dropdown:after
+{
+    background: none !Important;
+}
+.dropdown:before, .dropdown:after {
+{
+    border-style: none !Important;
+    position: relative !Important;
+}
+.dropdown:before {
+    border-bottom-style: none !Important;
+    border-top: medium none !Important;
+}
+</style>

@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Bricks_Catalogfilters>
+            <version>0.1.0</version>
+         </Bricks_Catalogfilters>
+    </modules>
+    
+    <admin>
+        <routers>
+			<catalogfilters>
+				<use>admin</use>
+				<args>
+					<module>Bricks_Catalogfilters</module>
+					<frontName>filters_settings</frontName>
+				</args>
+			</catalogfilters>
+        </routers>
+    </admin>
+
+    <adminhtml>
+        <menu>
+            <catalogfil module="catalogfilters">
+              <title>Catalog Filters</title>
+              <sort_order>72</sort_order>
+                <children>
+                    <filter_menu module="catalogfilters">
+                        <title>Settings</title>
+                        <sort_order>1</sort_order>
+                        <action>catalogfilters/adminhtml_catalogfilters/new</action>
+                    </filter_menu>
+                </children>
+            </catalogfil>
+        </menu>
+		<layout>
+			<updates>
+				<catalogfilters>
+					<file>catalogfilters.xml</file>
+				</catalogfilters>
+			</updates>
+		</layout>
+    </adminhtml>   
+    <global>
+        <models>
+            <catalogfilters>
+                <class>Bricks_Catalogfilters_Model</class>
+                <resourceModel>catalogfilters_mysql4</resourceModel>
+            </catalogfilters>
+            <catalogfilters_mysql4>
+                <class>Bricks_Catalogfilters_Model_Mysql4</class>
+                <entities>
+                    <catalogfilters>
+                        <table>catalogfilters</table>
+                    </catalogfilters>
+                </entities>
+            </catalogfilters_mysql4>
+        </models>
+
+        <blocks>
+            <catalogfilters>
+                <class>Bricks_Catalogfilters_Block</class>
+            </catalogfilters>
+        </blocks>
+
+        <helpers>
+            <catalogfilters>
+                <class>Bricks_Catalogfilters_Helper</class>
+            </catalogfilters>
+        </helpers>
+
+
+        <resources>
+            <catalogfilters_setup>
+                <setup>
+                    <module>Bricks_Catalogfilters</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </catalogfilters_setup>
+            <catalogfilters_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </catalogfilters_write>
+            <catalogfilters_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </catalogfilters_read>
+
+            <bricks_catalogfilters_setup>
+                <setup>
+                    <module>Bricks_Catalogfilters</module>
+                </setup>
+            </bricks_catalogfilters_setup>
+        </resources>
+    </global>
+
+    <frontend>
+        <routers>
+          <catalogfilters>
+            <use>standard</use>
+              <args>
+                <module>Bricks_Catalogfilters</module>
+                <frontName>filters</frontName>
+              </args>
+          </catalogfilters>
+        </routers>
+        <layout>
+          <updates>
+          <catalogfilters>
+            <file>catalogfilters.xml</file>
+          </catalogfilters>
+          </updates>
+        </layout>
+        <events> 
+            <catalog_product_collection_apply_limitations_after>
+                <observers>
+                  <catalogfilters_observer_edit_col>
+                    <type>singleton</type>
+                    <class>catalogfilters/observer</class>
+                    <method>changeColletion</method>
+                  </catalogfilters_observer_edit_col>
+                </observers>
+            </catalog_product_collection_apply_limitations_after>
+        </events>     
+  </frontend>
+</config>

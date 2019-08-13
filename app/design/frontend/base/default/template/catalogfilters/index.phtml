@@ -1,0 +1,119 @@
+<link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl('skin'); ?>frontend/base/default/css/semantic.css">
+<script src="<?php echo Mage::getBaseUrl('skin'); ?>frontend/base/default/js/semantic.js"></script>
+<?php 
+$model = Mage::getModel('catalogfilters/catalogfilters')->load(1);
+$array = explode(',', $model->getFilterAttributeCode());
+$_category  = Mage::getModel('catalog/layer')->getCurrentCategory();
+$currentUrl=strtok($_SERVER["REQUEST_URI"],'?');
+$cate_id = Mage::getModel('catalog/layer')->getCurrentCategory()->getId(); 
+if($model->getFilterAttributeCode()!='')
+{
+?>
+<div id="attributes">
+<?php 
+foreach ($array as $key => $val) {
+    ?>
+<!-- <select disabled="disabled" id='<?php echo $val; ?>' > 
+    <option>Loading Options....</option>
+</select> -->
+<div id='<?php echo $val; ?>' class="ui loading selection dropdown">
+  <?php echo $val; ?>
+  <i class="dropdown icon"></i>
+  <div class="menu">
+    <div class="item">loading....</div>
+  </div>
+</div>
+<?php
+    }
+?>
+<button onclick="resetFilters()" class="ui secondary button">Reset Filters</button>
+</div>
+<?php 
+}
+?>
+<!-- <input type="button" onclick="resetFilters()" value="Reset Filters" id="reset" />  -->
+
+<script type="text/javascript">
+jQuery(document).ready(function($){
+var url = "<?php echo Mage::getBaseUrl().'filters/test/loadAttribs'; ?>";
+		jQuery.ajax({
+            url: url,
+            dataType: 'json',
+            type : 'get',
+            data: {'cate_id':<?php echo $cate_id;?>},
+            success: function(response){
+
+            	var $el = jQuery("#attributes");
+                    if(!response.error)
+                    {
+                    	jQuery.each(response, function(val, key) {
+	                    	// console.log(val);
+                             if(key)
+                             {
+                                var $el2 = jQuery("#"+val);
+                                jQuery("#"+val+" .menu").remove(); // Remove previous options
+                                jQuery("#"+val+" .icon").remove(); // Remove previous options
+                                
+                                $el2.removeClass(); // remove all classes
+                                $el2.addClass('ui floating dropdown labeled search icon button');
+                                $el2.attr('onchange','getUrl("'+val+'",this)');
+                                $el2.append('<i class="filter icon"></i><div class="menu"><div class="header"><i class="tags icon"></i>Filter by '+val+'</div></div>');
+                                var $menu = jQuery("#"+val+" .menu");
+
+                                jQuery.each(key, function(value1, key1) {
+                                $menu.append(
+                                    '<div onclick="getUrl('+"'"+val+"'"+','+"'"+key1+"'"+')" class="item">'+value1+'</div>'
+
+                                    );
+                                });
+                            }else
+                            {
+                                var $el2 = jQuery("#"+val);
+                                jQuery("#"+val+" .menu").remove(); // Remove previous options
+                                jQuery("#"+val+" .icon").remove(); // Remove previous options
+                                
+                                $el2.removeClass(); // remove all classes
+                                $el2.addClass('ui floating dropdown labeled search icon button');
+                                $el2.append('<i class="filter icon"></i><div class="menu"><div class="header"><i class="tags icon"></i>Filter by '+val+'</div></div>');
+                                var $menu = jQuery("#"+val+" .menu");
+                                $menu.append(
+                                    '<div class="item">No '+val+' Not Found</div>'
+                                    );
+
+                            }
+
+                    	});	
+                        jQuery('.ui.dropdown').dropdown();
+                	}
+            }
+        });
+
+});
+jQuery('.ui.dropdown')
+  .dropdown()
+;
+function getUrl($item,$value)
+{
+   window.location.href = "<?php echo $currentUrl?>?"+$item+"="+$value;
+}
+function resetFilters()
+{
+   window.location.href = "<?php echo $currentUrl?>";
+}
+</script>
+<style>
+.dropdown
+{
+    overflow: visible !Important;
+    height: auto !Important;
+    /*width: auto !Important;*/
+}
+.dropdown:before, .dropdown:after
+{
+    background: none !Important;
+}
+.button span, .cart-table .product-cart-actions .button span, #co-shipping-method-form .buttons-set .button span, .footer .button span, .button2 span, .minicart-actions .cart-link span, .minicart-actions .checkout-button span
+{
+
+}
+</style>

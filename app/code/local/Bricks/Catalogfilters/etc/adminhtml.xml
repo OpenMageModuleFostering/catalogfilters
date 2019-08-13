@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<config>
+  <acl>
+    <resources>
+      <all>
+        <title>Allow Everything</title>
+      </all>
+      <admin>
+        <children>
+          <catalogfilters translate="title" module="catalogfilters">
+                    <title>catalogfilters</title>
+                    <children>
+                        <firstchild>
+                            <title>Catalogfilters</title>
+                        </firstchild>
+                    </children>
+          </catalogfilters>
+          <system>
+            <children>
+              <config>
+                <children>
+                  <bricks_options translate="title">
+                    <title>Configuration Section</title>
+                    <sort_order>100</sort_order>
+                  </bricks_options>
+                </children>
+              </config>
+            </children>
+          </system>
+        </children>
+      </admin>
+    </resources>
+  </acl>
+</config>

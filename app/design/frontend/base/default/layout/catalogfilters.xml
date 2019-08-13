@@ -1,0 +1,12 @@
+<?xml version="1.0"?>   
+<layout version="0.1.0"> 
+	<default>
+          <reference name="content"></reference>
+	</default>
+  	<catalogfilters_test_index>
+       	<reference name="content">
+            <block type="catalogfilters/test" name="index_test" template="catalogfilters/index.phtml" />
+       	</reference>
+  	</catalogfilters_test_index>
+</layout>   
+	

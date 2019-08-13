@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/catalogfilters",
+    "type": "magento-module",
+    "license": "OSL-3.0",
+    "homepage": "",
+    "description": "catalogfilters",
+    "authors": [
+    {
+        "name": "ab",
+        "email": "sahi.abubakar@gmail.com"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}
